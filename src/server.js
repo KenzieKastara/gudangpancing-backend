@@ -146,6 +146,7 @@ const start = async () => {
       fastify.log.info('Port in use, trying alternative port 8002...');
       try {
         await fastify.listen({ port: 8002, host: '0.0.0.0' });
+        await seedAdmin();
         fastify.log.info('🚀 Server running on http://0.0.0.0:8002');
       } catch (altError) {
         fastify.log.error('Failed to start on alternative port');
