@@ -159,7 +159,7 @@ const start = async () => {
 };
 // AUTO CREATE ADMIN IF NOT EXISTS
 import Admin from './models/admin.model.js';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 
 const seedAdmin = async () => {
   try {
