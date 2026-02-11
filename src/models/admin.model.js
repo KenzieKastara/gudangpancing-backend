@@ -1,30 +1,25 @@
 import mongoose from 'mongoose';
 
-const adminSchema = new mongoose.Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-      trim: true
-    },
-    password: {
-      type: String,
-      required: true
-    }
+const adminSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true
   },
-  {
-    timestamps: true
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
   }
-);
+}, {
+  timestamps: true
+});
 
-const Admin = mongoose.model('Admin', adminSchema);
+// Prevent OverwriteModelError
+const Admin = mongoose.models.Admin || mongoose.model('Admin', adminSchema);
 
 export default Admin;
