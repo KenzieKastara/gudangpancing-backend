@@ -156,5 +156,27 @@ const start = async () => {
     }
   }
 };
+// AUTO CREATE ADMIN IF NOT EXISTS
+import Admin from './models/admin.model.js';
+import bcrypt from 'bcryptjs';
+
+const seedAdmin = async () => {
+  try {
+    const existing = await Admin.findOne({ username: 'GPadmin' });
+    if (!existing) {
+      const hashed = await bcrypt.hash('123456', 10);
+      await Admin.create({
+        username: 'GPadmin',
+        email: 'admin@gudangpancing.com',
+        password: hashed
+      });
+      console.log('✅ Default admin created');
+    } else {
+      console.log('ℹ️ Admin already exists');
+    }
+  } catch (err) {
+    console.log('Seed admin error:', err.message);
+  }
+};
 
 start();
