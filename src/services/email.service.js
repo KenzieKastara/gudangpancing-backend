@@ -53,12 +53,16 @@ class EmailService {
     `;
 
     try {
-      const { data, error } = await resend.emails.send({
-        from: SENDER_EMAIL,
-        to: [recipientEmail],
-        subject: 'Kode OTP Reset Password - Gudang Pancing',
-        html: htmlContent
-      });
+   const { data, error } = await resend.emails.send({
+  from: SENDER_EMAIL,
+  to: [recipientEmail],
+  subject: 'Kode OTP Reset Password - Gudang Pancing',
+  templateId: 'password-reset-otp', // isi dengan ID template kamu
+  variables: {
+    otp: otp,
+    username: username
+  }
+});
 
       if (error) {
         console.error('Resend error:', error);
