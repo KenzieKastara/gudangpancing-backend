@@ -134,46 +134,44 @@ process.on('unhandledRejection', (reason, promise) => {
   // Don't exit - keep server running
 });
 
-// Start server with safe error handling
-const start = async () => {
-  try {
-    const host = '0.0.0.0';
-    
-    await fastify.listen({ port: PORT, host });
-    
-    fastify.log.info(`🚀 Server running on http://${host}:${PORT}`);
-    fastify.log.info(`📊 Environment: ${NODE_ENV}`);
-    fastify.log.info(`📦 API Prefix: /api`);
-    fastify.log.info(`💾 Database: ${mongoose.connection.readyState === 1 ? 'MongoDB Connected' : 'Safe mode'}`);
-  } catch (error) {
-    fastify.log.error('Failed to start server:', error);
-    // Try alternative port if main port fails
-    if (error.code === 'EADDRINUSE') {
-      fastify.log.info('Port in use, trying alternative port 8002...');
-      try {
-        await fastify.listen({ port: 8002, host: '0.0.0.0' });
-        await seedAdmin();
-        fastify.log.info('🚀 Server running on http://0.0.0.0:8002');
-      } catch (altError) {
-        fastify.log.error('Failed to start on alternative port');
-        process.exit(1);
-      }
-    } else {
-      process.exit(1);
-    }
-  }
-};
 // AUTO CREATE ADMIN IF NOT EXISTS
 const seedAdmin = async () => {
-   ...
+  try {
+    const existing = await Admin.findOne({ username: 'GPadmin' });
+
+    const hashed = await bcrypt.hash('123456', 10);
+
+    if (!existing) {
+      await Admin.create({
+        username: 'GPadmin',
+        email: 'gudangpancingmurahmeriah@gmail.com',
+        password: hashed
+      });
+      console.log('✅ Default admin created');
+    } else {
+      // paksa update password & email supaya pasti sinkron
+      existing.email = 'gudangpancingmurahmeriah@gmail.com';
+      existing.password = hashed;
+      await existing.save();
+      console.log('🔄 Admin forced updated');
+    }
+  } catch (err) {
+    console.log('Seed admin error:', err.message);
+  }
 };
 
 const start = async () => {
   try {
     const host = '0.0.0.0';
 
-    await seedAdmin(); // ⬅️ TAMBAHKAN INI
-
+    await seedAdmin();
     await fastify.listen({ port: PORT, host });
+
+    fastify.log.info(`🚀 Server running on http://${host}:${PORT}`);
+  } catch (error) {
+    fastify.log.error('Failed to start server:', error);
+    process.exit(1);
+  }
+};
 
 start();
