@@ -9,7 +9,7 @@ if (process.env.RESEND_API_KEY) {
 }
 
 const SENDER_EMAIL =
-  process.env.SENDER_EMAIL || 'GudangPancing <onboarding@resend.dev>';
+  process.env.SENDER_EMAIL || 'GudangPancing <admin@gudangpancing.id>';
 
 class EmailService {
   async sendOTPEmail(recipientEmail, otp, username) {
