@@ -38,6 +38,9 @@ const fastify = Fastify({
 // Wait a bit for MongoDB connection
 await new Promise(resolve => setTimeout(resolve, 1000));
 
+console.log("Connected DB Name:", mongoose.connection.name);
+console.log("Mongo Ready State:", mongoose.connection.readyState);
+
 // Register plugins
 await fastify.register(cors, {
   origin: true, // Allow all origins
