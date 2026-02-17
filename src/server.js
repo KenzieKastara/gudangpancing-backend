@@ -183,4 +183,11 @@ const seedAdmin = async () => {
   }
 };
 
-start();
+const start = async () => {
+  try {
+    const host = '0.0.0.0';
+
+    await seedAdmin(); // ⬅️ TAMBAHKAN INI
+
+    await fastify.listen({ port: PORT, host });
+
