@@ -136,8 +136,6 @@ process.on('unhandledRejection', (reason, promise) => {
 const start = async () => {
   try {
     const host = '0.0.0.0';
-
-    await seedAdmin();
     await fastify.listen({ port: PORT, host });
 
     fastify.log.info(`🚀 Server running on http://${host}:${PORT}`);
