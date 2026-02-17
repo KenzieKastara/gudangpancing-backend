@@ -4,8 +4,7 @@ import cors from '@fastify/cors';
 import jwt from '@fastify/jwt';
 import rateLimit from '@fastify/rate-limit';
 import multipart from '@fastify/multipart';
-import Admin from './models/admin.model.js';
-import bcrypt from 'bcrypt';
+
 
 
 // Routes
@@ -133,29 +132,6 @@ process.on('unhandledRejection', (reason, promise) => {
   fastify.log.error('Unhandled Rejection at:', promise, 'reason:', reason);
   // Don't exit - keep server running
 });
-
-// AUTO CREATE ADMIN IF NOT EXISTS
-const seedAdmin = async () => {
-  try {
-    const existing = await Admin.findOne({ username: 'GPadmin' });
-
-    if (!existing) {
-      const hashed = await bcrypt.hash('123456', 10);
-
-      await Admin.create({
-        username: 'GPadmin',
-        email: 'gudangpancingmurahmeriah@gmail.com',
-        password: hashed
-      });
-
-      console.log('✅ Default admin created');
-    } else {
-      console.log('ℹ️ Admin already exists');
-    }
-  } catch (err) {
-    console.log('Seed admin error:', err.message);
-  }
-};
 
 const start = async () => {
   try {
