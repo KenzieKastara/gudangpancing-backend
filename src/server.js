@@ -139,21 +139,18 @@ const seedAdmin = async () => {
   try {
     const existing = await Admin.findOne({ username: 'GPadmin' });
 
-    const hashed = await bcrypt.hash('123456', 10);
-
     if (!existing) {
+      const hashed = await bcrypt.hash('123456', 10);
+
       await Admin.create({
         username: 'GPadmin',
         email: 'gudangpancingmurahmeriah@gmail.com',
         password: hashed
       });
+
       console.log('✅ Default admin created');
     } else {
-      // paksa update password & email supaya pasti sinkron
-      existing.email = 'gudangpancingmurahmeriah@gmail.com';
-      existing.password = hashed;
-      await existing.save();
-      console.log('🔄 Admin forced updated');
+      console.log('ℹ️ Admin already exists');
     }
   } catch (err) {
     console.log('Seed admin error:', err.message);
